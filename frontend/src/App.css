@@ -1209,3 +1209,307 @@ body {
     width: 100%;
   }
 }
+
+/* ==================================================
+   NEW MULTI-AGENT & SYSTEM UI STYLES
+   ================================================== */
+
+.gemini-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  font-size: 11px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.gemini-status-pill.ok {
+  color: var(--green);
+  border-color: rgba(66, 230, 164, 0.2);
+}
+
+.gemini-status-pill.quota {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.08);
+  border-color: rgba(251, 191, 36, 0.25);
+}
+
+.gemini-status-pill.error {
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.08);
+  border-color: rgba(248, 113, 113, 0.25);
+}
+
+.gemini-status-pill strong {
+  margin-left: auto;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+.quota-warn {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.agents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.agent-card {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.018);
+  border-radius: 16px;
+  padding: 22px 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.agent-card:hover {
+  border-color: rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.03);
+}
+
+.agent-card.selected {
+  border-color: var(--purple);
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.15);
+  background: rgba(139, 92, 246, 0.05);
+}
+
+.agent-card-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.agent-card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #8b5cf6, #6d38d9);
+  color: white;
+}
+
+.agent-card-name {
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.agent-status-badge {
+  font-size: 9px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.agent-status-badge.active {
+  background: rgba(66, 230, 164, 0.15);
+  color: var(--green);
+  border: 1px solid rgba(66, 230, 164, 0.3);
+}
+
+.agent-status-badge.paused {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.agent-card-domain {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.agent-card-id {
+  font-size: 11px;
+  color: #575460;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.scheduler-indicator.running {
+  color: var(--green);
+}
+
+.scheduler-indicator.stopped {
+  color: #6b7280;
+}
+
+.agent-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.agent-action-btn {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: #ddd9e8;
+  padding: 9px 15px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.agent-action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.agent-action-btn.start {
+  color: var(--green);
+  border-color: rgba(66, 230, 164, 0.3);
+}
+
+.agent-action-btn.stop {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.agent-action-btn.run-now {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(109, 56, 217, 0.2));
+  border-color: rgba(139, 92, 246, 0.4);
+  color: #c4b5fd;
+}
+
+.agent-action-btn.run-now:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(109, 56, 217, 0.35));
+}
+
+.agent-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.new-agent-row-btn {
+  border: 1px dashed var(--border);
+  background: transparent;
+  color: var(--muted);
+  padding: 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.new-agent-row-btn:hover {
+  border-color: var(--purple);
+  color: var(--text);
+  background: rgba(139, 92, 246, 0.03);
+}
+
+.post-source-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #a78bfa;
+  margin-top: 10px;
+  margin-bottom: -10px;
+}
+
+.agent-name-tag {
+  color: var(--purple-bright);
+  font-weight: 600;
+}
+
+.agent-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.agent-filter-btn {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--muted);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.agent-filter-btn.active {
+  background: rgba(139, 92, 246, 0.2);
+  color: #eee9ff;
+  border-color: var(--purple);
+}
+
+.activity-row.event-danger {
+  border-left: 3px solid #f87171;
+}
+
+.activity-row.event-warning {
+  border-left: 3px solid #fbbf24;
+}
+
+.activity-row.event-success {
+  border-left: 3px solid var(--green);
+}
+
+.activity-status.status-danger {
+  color: #f87171;
+}
+
+.activity-status.status-warning {
+  color: #fbbf24;
+}
+
+.activity-status.status-success {
+  color: var(--green);
+}
+
+.activity-status.status-running {
+  color: #a78bfa;
+}
+
+.status-text.online {
+  color: var(--green);
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.status-text.paused {
+  color: #fbbf24;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.no-agent-hint {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+}
+
+.quota-badge {
+  color: #fbbf24;
+  display: inline-flex;
+  align-items: center;
+}
