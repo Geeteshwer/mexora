@@ -192,7 +192,11 @@ function App() {
           persona: { name: newName.trim(), domain: newDomain.trim() },
         }),
       });
-      if (!r.ok) { console.error("Agent creation failed:", r.status); return; }
+      if (!r.ok) {
+        console.error("Agent creation failed:", r.status);
+        alert(`Agent creation failed (HTTP ${r.status}). Please check backend status.`);
+        return;
+      }
       const d = await r.json();
       if (d.agentId) {
         const agentId = d.agentId;
@@ -204,7 +208,7 @@ function App() {
         await fetchAgents();
         await fetchStats();
 
-        // Show empty feed for this new agent immediately
+        // Show feed for this new agent
         await fetchFeed(agentId);
 
         // Poll every 5 s for up to 90 s until the first post arrives
@@ -216,9 +220,12 @@ function App() {
           await fetchStats();
           if (attempts >= 18) clearInterval(poll); // stop after 90 s
         }, 5000);
+      } else {
+        alert("Server returned an invalid agent response.");
       }
     } catch (e) {
       console.error("Agent creation failed:", e);
+      alert("Could not connect to the backend server. Please make sure the backend is running.");
     } finally {
       setCreating(false);
     }

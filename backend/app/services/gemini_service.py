@@ -13,15 +13,12 @@ load_dotenv()
 
 api_key = os.getenv("GEMINI_API_KEY")
 
-if not api_key:
-    raise ValueError("GEMINI_API_KEY is not set")
-
-
-# --------------------------------------------------
-# GEMINI CLIENT
-# --------------------------------------------------
-
-client = genai.Client(api_key=api_key)
+client = None
+if api_key and api_key.strip():
+    try:
+        client = genai.Client(api_key=api_key.strip())
+    except Exception as e:
+        print(f"[GeminiService] Warning: Could not initialize Gemini client: {e}")
 
 MODEL_NAME = "gemini-3.5-flash"
 
@@ -30,17 +27,17 @@ MODEL_NAME = "gemini-3.5-flash"
 # QUOTA STATE
 # --------------------------------------------------
 
-# Once Gemini tells us that the quota is exhausted,
-# we stop making Gemini requests for the rest of
-# this application run.
 GEMINI_QUOTA_EXHAUSTED = False
 
 
 def is_gemini_available():
     """
-    Returns False once Gemini quota has been exhausted or forced to fallback.
+    Returns False if Gemini API key is missing, client failed to init,
+    quota has been exhausted, or force fallback is active.
     """
     if os.getenv("FORCE_FALLBACK", "false").lower() == "true":
+        return False
+    if not api_key or client is None:
         return False
     return not GEMINI_QUOTA_EXHAUSTED
 
@@ -50,19 +47,19 @@ def evaluate_and_write(persona, articles):
     global GEMINI_QUOTA_EXHAUSTED
 
     # --------------------------------------------------
-    # DO NOT CALL GEMINI IF QUOTA IS ALREADY EXHAUSTED OR FORCED TO FALLBACK
+    # DO NOT CALL GEMINI IF UNAVAILABLE OR QUOTA EXHAUSTED
     # --------------------------------------------------
 
-    if GEMINI_QUOTA_EXHAUSTED or os.getenv("FORCE_FALLBACK", "false").lower() == "true":
+    if GEMINI_QUOTA_EXHAUSTED or os.getenv("FORCE_FALLBACK", "false").lower() == "true" or not api_key or client is None:
 
-        print("GEMINI QUOTA EXHAUSTED OR FORCED TO FALLBACK")
+        print("GEMINI UNAVAILABLE, QUOTA EXHAUSTED, OR FORCED TO FALLBACK")
         print("No Gemini request will be made.")
 
         return {
             "publish": False,
             "selected_index": None,
             "score": 0,
-            "reason": "Gemini quota is exhausted or forced fallback is active.",
+            "reason": "Gemini API is unavailable or quota is exhausted. Using fallback engine.",
             "post": "",
             "quota_exhausted": True,
         }
