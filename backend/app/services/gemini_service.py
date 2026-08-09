@@ -1,20 +1,28 @@
 import json
 import os
 
-from dotenv import load_dotenv
-from google import genai
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    pass
+
+try:
+    from google import genai
+    HAS_GENAI = True
+except Exception:
+    genai = None
+    HAS_GENAI = False
 
 
 # --------------------------------------------------
-# ENVIRONMENT
+# ENVIRONMENT & GEMINI CLIENT
 # --------------------------------------------------
-
-load_dotenv()
 
 api_key = os.getenv("GEMINI_API_KEY")
 
 client = None
-if api_key and api_key.strip():
+if HAS_GENAI and genai and api_key and api_key.strip():
     try:
         client = genai.Client(api_key=api_key.strip())
     except Exception as e:
