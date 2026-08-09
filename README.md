@@ -4,9 +4,10 @@ An autonomous AI intelligence platform that continuously discovers tech and AI s
 
 ---
 
-## 🚀 Live Deployed Service
+## 🚀 Live Deployed Application
 
-- **Backend API**: [https://mexora-backend.onrender.com](https://mexora-backend.onrender.com)
+- **Live Dashboard App**: [https://mexora.vercel.app](https://mexora.vercel.app)
+- **Backend REST API**: [https://mexora-backend.onrender.com](https://mexora-backend.onrender.com)
 - **API Documentation**: [https://mexora-backend.onrender.com/docs](https://mexora-backend.onrender.com/docs)
 - **Health Check**: [https://mexora-backend.onrender.com/health](https://mexora-backend.onrender.com/health)
 
