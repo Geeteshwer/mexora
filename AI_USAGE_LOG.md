@@ -2,6 +2,8 @@
 
 This document records the utilization of Artificial Intelligence (AI) tools, models, prompt engineering, and agentic assistants during the architecture, implementation, debugging, refactoring, and deployment preparation of the **Mexora** platform.
 
+> 📌 **PROMPTS.md**: See [PROMPTS.md](https://github.com/Geeteshwer/mexora/blob/main/PROMPTS.md) for the exported chat prompts and system prompt templates verifying the vibe-coded build.
+
 ---
 
 ## 🤖 Overview of AI Collaboration

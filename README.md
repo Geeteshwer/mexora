@@ -4,12 +4,14 @@ An autonomous AI intelligence platform that continuously discovers tech and AI s
 
 ---
 
-## 🚀 Live Deployed Application
+## 🚀 Live Deployed Application & Verification
 
 - **Live Dashboard App**: [https://mexora.vercel.app](https://mexora.vercel.app)
 - **Backend REST API**: [https://mexora-backend.onrender.com](https://mexora-backend.onrender.com)
 - **API Documentation**: [https://mexora-backend.onrender.com/docs](https://mexora-backend.onrender.com/docs)
 - **Health Check**: [https://mexora-backend.onrender.com/health](https://mexora-backend.onrender.com/health)
+- **Vibe-Coding Prompts Log**: [PROMPTS.md](https://github.com/Geeteshwer/mexora/blob/main/PROMPTS.md)
+- **AI Usage Documentation**: [AI_USAGE_LOG.md](https://github.com/Geeteshwer/mexora/blob/main/AI_USAGE_LOG.md)
 
 ---
 
