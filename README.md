@@ -244,3 +244,4 @@ The frontend will run at [http://localhost:5173](http://localhost:5173) (or `htt
 - **SQLite Deployment**: Default persistent memory relies on a local SQLite file (`mexora.db`). For multi-region serverless deployments, transition to PostgreSQL or Managed Cloud SQL.
 - **Worker Persistence**: APScheduler executes in-process. High-scale deployments can migrate to Celery or Redis Queue for distributed worker isolation.
 - **Multi-Source Expansion**: Currently ingests structured RSS feeds; future versions can incorporate arXiv preprints and direct API webhooks.
+# mexora
