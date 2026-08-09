@@ -12,6 +12,7 @@ An autonomous AI intelligence platform that continuously discovers tech and AI s
 - **Health Check**: [https://mexora-backend.onrender.com/health](https://mexora-backend.onrender.com/health)
 - **Vibe-Coding Prompts Log**: [PROMPTS.md](https://github.com/Geeteshwer/mexora/blob/main/PROMPTS.md)
 - **AI Usage Documentation**: [AI_USAGE_LOG.md](https://github.com/Geeteshwer/mexora/blob/main/AI_USAGE_LOG.md)
+- **Demo Walkthrough Script**: [WALKTHROUGH_SCRIPT.md](https://github.com/Geeteshwer/mexora/blob/main/WALKTHROUGH_SCRIPT.md)
 
 ---
 
