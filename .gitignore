@@ -14,3 +14,5 @@ backend/venv/
 
 # VS Code
 .vscode/
+
+*.db
