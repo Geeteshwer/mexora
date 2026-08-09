@@ -77,56 +77,23 @@ def _run_cycle_inner(agent_id: str, persona: dict):
     )
 
     # --------------------------------------------------
-    # STEP 2: SELECT RELEVANT ARTICLES
+    # STEP 2: FILTER OUT ALREADY PROCESSED ARTICLES FIRST
     # --------------------------------------------------
 
-    top_articles = select_top_articles(articles, limit=MAX_ARTICLES_PER_CYCLE)
-
-    if not top_articles:
-        print("No suitable articles found.")
-        act.log_event(
-            act.CYCLE_SKIPPED,
-            "No articles matched editorial relevance criteria. Cycle skipped.",
-            agent_id=agent_id,
-            status=act.SKIPPED,
-        )
-        return None
-
-    print(f"Selected {len(top_articles)} relevant articles.")
-    act.log_event(
-        act.ARTICLES_SELECTED,
-        f"Selected {len(top_articles)} relevant articles for evaluation.",
-        agent_id=agent_id,
-        status=act.INFO,
-    )
-
-    # --------------------------------------------------
-    # STEP 3: REMOVE ALREADY PROCESSED ARTICLES
-    # --------------------------------------------------
-
-    new_articles = []
+    unseen_articles = []
     skipped_count = 0
 
-    for article in top_articles:
+    for article in articles:
         url = article.get("link", "")
 
         if article_seen(agent_id, url):
-            print(f"Already processed: {article['title']}")
             skipped_count += 1
             continue
 
-        # Mark as seen immediately to avoid sending it to Gemini twice
-        mark_article_seen(
-            agent_id,
-            url,
-            title=article.get("title", ""),
-            source=article.get("source_name", ""),
-            published=False,
-        )
-
-        new_articles.append(article)
+        unseen_articles.append(article)
 
     if skipped_count > 0:
+        print(f"{skipped_count} article(s) already seen by agent {agent_id}.")
         act.log_event(
             act.DUPLICATE_SKIPPED,
             f"{skipped_count} article(s) skipped — already seen by this agent.",
@@ -134,7 +101,7 @@ def _run_cycle_inner(agent_id: str, persona: dict):
             status=act.INFO,
         )
 
-    if not new_articles:
+    if not unseen_articles:
         print("All discovered articles have already been considered.")
         act.log_event(
             act.CYCLE_SKIPPED,
@@ -145,12 +112,45 @@ def _run_cycle_inner(agent_id: str, persona: dict):
         return None
 
     # --------------------------------------------------
-    # STEP 4: LIMIT ARTICLES SENT TO GEMINI
+    # STEP 3: SELECT RELEVANT UNSEEN ARTICLES
     # --------------------------------------------------
 
-    new_articles = new_articles[:MAX_GEMINI_ARTICLES]
+    top_articles = select_top_articles(unseen_articles, limit=MAX_ARTICLES_PER_CYCLE)
 
-    print(f"Sending {len(new_articles)} new articles to Gemini.")
+    if not top_articles:
+        print("No suitable unseen articles found.")
+        act.log_event(
+            act.CYCLE_SKIPPED,
+            "No unseen articles matched editorial relevance criteria. Cycle skipped.",
+            agent_id=agent_id,
+            status=act.SKIPPED,
+        )
+        return None
+
+    print(f"Selected {len(top_articles)} relevant unseen articles.")
+    act.log_event(
+        act.ARTICLES_SELECTED,
+        f"Selected {len(top_articles)} relevant unseen articles for evaluation.",
+        agent_id=agent_id,
+        status=act.INFO,
+    )
+
+    # --------------------------------------------------
+    # STEP 4: PREPARE CANDIDATES FOR EDITORIAL EVALUATION
+    # --------------------------------------------------
+
+    new_articles = top_articles[:MAX_GEMINI_ARTICLES]
+
+    for article in new_articles:
+        mark_article_seen(
+            agent_id,
+            article.get("link", ""),
+            title=article.get("title", ""),
+            source=article.get("source_name", ""),
+            published=False,
+        )
+
+    print(f"Sending {len(new_articles)} new articles for editorial evaluation.")
     # --------------------------------------------------
     # STEP 5: EDITORIAL DECISION (GEMINI OR FALLBACK)
     # --------------------------------------------------
