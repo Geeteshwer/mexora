@@ -86,8 +86,11 @@ Below are key prompts used during the interactive development, debugging, and de
 #### B. Continuous Multi-Cycle Candidate Filtering Prompt
 > *"The agent is producing one post and then skipping all subsequent cycles because top candidates are marked seen after cycle 1. Fix the candidate selection pipeline so seen articles are filtered BEFORE selecting top candidates, ensuring every cycle evaluates a new batch of unseen RSS stories continuously."*
 
-#### C. Production Deployment & Repository Setup Prompt
-> *"Inspect the Mexora repository, verify local backend and frontend execution, configure environment templates, prepare Render blueprint (`render.yaml`) and Vercel configuration (`frontend/vercel.json`), and push a clean sequence of logical Git commits to GitHub."*
+#### C. Score Gauge & Scoring Factor Breakdown Prompt
+> *"Make the alignment percentage score in post cards prominent and large (`85/100`). Break down the score into 4 explicit scoring factors: Domain Fit, Technical Depth, Freshness Index, and Hype/Promo Filter with visual progress indicators."*
+
+#### D. Interactive AI Simulator & Audio Speech Synthesis Prompt
+> *"Add an interactive AI Editorial Simulator Sandbox page where users can test custom headlines against agent personas in real time. Add a 1-click Export Briefing JSON button on the dashboard and an interactive Listen to Audio speech synthesis button on post cards."*
 
 ---
 
@@ -131,13 +134,23 @@ Below are key prompts used during the interactive development, debugging, and de
   - Created status indicators for Gemini availability vs. Fallback Engine state.
   - Implemented instant first-post triggers upon agent creation to provide immediate visual feedback.
 
-### 6. Deployment Preparation & Production Hardening
+### 6. Interactive Features & Visual UI Enhancements
+- **AI Tool Used**: Antigravity Frontend Synthesizer & Web APIs
+- **Contributions**:
+  - Designed prominent Editorial Alignment Score Gauge (`score/100`) and Factor Breakdown Grid (Domain Fit, Technical Depth, Freshness Index, Noise Filter).
+  - Built Autonomous Rejection & Noise Filter Grid on Overview dashboard.
+  - Integrated Web Speech API audio synthesis for voice narration of AI persona posts with animated audio equalizer.
+  - Built interactive 5-stage Autonomous Pipeline Node Flow Visualizer.
+  - Built interactive AI Editorial Simulator Sandbox for custom headline evaluation testing.
+  - Added 1-click Executive Intelligence Briefing JSON export capability.
+
+### 7. Deployment Preparation & Production Hardening
 - **AI Tool Used**: Antigravity Deployment Assistant
 - **Contributions**:
   - Created environment variable templates (`backend/.env.example`, `frontend/.env.example`).
   - Added Render Blueprint (`render.yaml`) and Vercel configuration (`frontend/vercel.json`).
   - Optimized backend startup logic in `gemini_service.py` to handle missing API keys gracefully without crashing the Uvicorn worker process.
-  - Fixed CORS middleware configuration in `main.py` to dynamically support local ports (`5173`, `5174`) and production deployment origins.
+  - Configured production CORS middleware in `main.py` for Vercel cross-origin requests (`https://mexora.vercel.app`).
 
 ---
 

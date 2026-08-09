@@ -13,6 +13,9 @@ This document contains the chronological record of prompts and prompt engineerin
    - [Prompt 4: Continuous Multi-Cycle Publishing Fix](#prompt-4-continuous-multi-cycle-publishing-fix)
    - [Prompt 5: Real-Time Intelligence Dashboard & Filtering](#prompt-5-real-time-intelligence-dashboard--filtering)
    - [Prompt 6: Production Deployment (Render & Vercel)](#prompt-6-production-deployment-render--vercel)
+   - [Prompt 7: Score Gauge & Scoring Factor Breakdown](#prompt-7-score-gauge--scoring-factor-breakdown)
+   - [Prompt 8: Rejection Analytics Grid & Voice Audio Briefing](#prompt-8-rejection-analytics-grid--voice-audio-briefing)
+   - [Prompt 9: Interactive AI Simulator Sandbox & Briefing Export](#prompt-9-interactive-ai-simulator-sandbox--briefing-export)
 
 ---
 
@@ -97,3 +100,12 @@ WRITING STYLE:
 
 ### Prompt 6: Production Deployment (Render & Vercel)
 > *"Prepare Mexora for production deployment. Make `GEMINI_API_KEY` optional at startup so the Uvicorn process never exits with Status 1. Add `render.yaml` for Render backend web service and `frontend/vercel.json` for Vercel deployment. Configure dynamic CORS origins."*
+
+### Prompt 7: Score Gauge & Scoring Factor Breakdown
+> *"Make the alignment percentage score in post cards prominent and large (`85/100`). Break down the score into 4 explicit scoring factors: Domain Fit, Technical Depth, Freshness Index, and Hype/Promo Filter with visual progress indicators."*
+
+### Prompt 8: Rejection Analytics Grid & Voice Audio Briefing
+> *"Add a dedicated Stories Rejected StatCard and Autonomous Rejection & Noise Filter Grid on the Overview dashboard displaying discovered vs. rejected candidate stories and noise rejection rate. Add an interactive Listen to Audio speech synthesis button on post cards with an animated equalizer."*
+
+### Prompt 9: Interactive AI Simulator Sandbox & Briefing Export
+> *"Add an interactive AI Editorial Simulator Sandbox page where users can test custom headlines against agent personas in real time. Add a 1-click Export Briefing JSON button on the dashboard."*
