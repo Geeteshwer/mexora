@@ -1,18 +1,34 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+backend/.env
+
 # Python
 __pycache__/
 *.py[cod]
 *.pyo
-
-# Virtual Environment
+venv/
+.venv/
 backend/venv/
 
-# Environment variables
-.env
+# Node / Frontend
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+build/
+dist-ssr/
+*.local
 
-# macOS
-.DS_Store
-
-# VS Code
-.vscode/
-
+# Database
 *.db
+*.sqlite
+*.sqlite3
+backend/mexora.db
+mexora.db
+
+# macOS & Editors
+.DS_Store
+.vscode/
+.idea/
