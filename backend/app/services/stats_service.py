@@ -32,6 +32,9 @@ def get_stats():
     cursor.execute("SELECT COUNT(*) FROM articles WHERE published = 1")
     total_articles_published = cursor.fetchone()[0]
 
+    cursor.execute("SELECT COUNT(*) FROM articles WHERE published = 0")
+    total_articles_unpublished = cursor.fetchone()[0]
+
     # --------------------------------------------------
     # POST COUNTS
     # --------------------------------------------------
@@ -85,6 +88,7 @@ def get_stats():
         "articles": {
             "discovered": total_articles_discovered,
             "published":  total_articles_published,
+            "rejected":   total_articles_unpublished + duplicates_skipped,
             "duplicates_skipped": duplicates_skipped,
         },
         "publications": {

@@ -1562,3 +1562,239 @@ body {
   display: inline-flex;
   align-items: center;
 }
+
+/* BIG SCORE HERO IN POST CARD */
+.big-score-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(99, 102, 241, 0.1));
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  padding: 8px 16px;
+  border-radius: 14px;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+.big-score-val {
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.big-score-denom {
+  font-size: 13px;
+  font-weight: 700;
+  color: #a78bfa;
+}
+
+.score-summary-bar {
+  margin-top: 14px;
+  margin-bottom: 6px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(139, 92, 246, 0.25);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.score-summary-tag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.score-summary-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #8b8793;
+  letter-spacing: 0.5px;
+}
+
+.score-summary-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: #c4b5fd;
+}
+
+/* FACTOR BREAKDOWN */
+.factors-wrapper {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.factors-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #a78bfa;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  margin-bottom: 12px;
+}
+
+.factors-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 18px;
+}
+
+.factor-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.factor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.factor-name {
+  font-size: 11px;
+  color: #a09ca8;
+  font-weight: 500;
+}
+
+.factor-val {
+  font-size: 11px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.factor-status-pill {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--green);
+  background: rgba(34, 197, 94, 0.15);
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.factor-bar-bg {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.factor-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.factor-bar-fill.pass {
+  background: linear-gradient(90deg, #10b981, #22c55e);
+}
+
+/* REJECTION GRID PANEL */
+.rejection-grid-panel {
+  margin-top: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.panel-header-custom {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.panel-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  display: grid;
+  place-items: center;
+}
+
+.panel-header-custom h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.panel-header-custom p {
+  font-size: 12px;
+  color: #8b8793;
+  margin: 2px 0 0 0;
+}
+
+.rejection-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.rejection-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.rejection-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.rejection-card.total {
+  color: #60a5fa;
+  border-top: 3px solid #3b82f6;
+}
+
+.rejection-card.published {
+  color: #4ade80;
+  border-top: 3px solid #22c55e;
+}
+
+.rejection-card.rejected {
+  color: #f87171;
+  border-top: 3px solid #ef4444;
+}
+
+.rejection-card.efficiency {
+  color: #c084fc;
+  border-top: 3px solid #a855f7;
+}
+
+.rejection-val {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+.rejection-lbl {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.rejection-sub {
+  font-size: 11px;
+  color: #8b8793;
+  line-height: 1.4;
+}
