@@ -522,7 +522,15 @@ function App() {
 
           {/* ---- LIVE FEED ---- */}
           {activePage === "Live Feed" && (
-            <FullFeed posts={posts} agent={selectedAgent} />
+            <FullFeed
+              posts={posts}
+              agents={agents}
+              selectedAgent={selectedAgent}
+              onSelectAgent={agent => {
+                setSelectedAgent(agent);
+                fetchFeed(agent ? agent.agent_id : null);
+              }}
+            />
           )}
 
           {/* ---- AGENTS ---- */}
@@ -762,17 +770,38 @@ function FeedPreview({ posts }) {
 // FULL FEED
 // ==================================================
 
-function FullFeed({ posts, agent }) {
+function FullFeed({ posts, agents, selectedAgent, onSelectAgent }) {
   return (
     <section>
       <div className="section-heading">
         <div>
           <span className="section-eyebrow">AUTONOMOUS SIGNAL STREAM</span>
-          <h2>Live Feed {agent && <span className="agent-name-tag">— {agent.name}</span>}</h2>
+          <h2>Live Feed {selectedAgent && <span className="agent-name-tag">— {selectedAgent.name}</span>}</h2>
           <p>Every published signal selected by the editorial intelligence engine.</p>
         </div>
         <div className="feed-count">{posts.length} SIGNAL{posts.length !== 1 ? "S" : ""}</div>
       </div>
+
+      {agents && agents.length > 0 && (
+        <div className="agent-filter-bar">
+          <span>Filter stream:</span>
+          <button
+            className={`agent-filter-btn ${!selectedAgent ? "active" : ""}`}
+            onClick={() => onSelectAgent(null)}
+          >
+            All Signals
+          </button>
+          {agents.map(a => (
+            <button
+              key={a.agent_id}
+              className={`agent-filter-btn ${selectedAgent?.agent_id === a.agent_id ? "active" : ""}`}
+              onClick={() => onSelectAgent(a)}
+            >
+              {a.name} ({a.domain})
+            </button>
+          ))}
+        </div>
+      )}
 
       {posts.length === 0 ? (
         <EmptyState />
@@ -1016,20 +1045,24 @@ function AgentCard({
 function ActivityPage({ activity, agents, selectedAgent, onSelectAgent }) {
   return (
     <section>
-      {agents.length > 1 && (
-        <div className="agent-filter-bar">
-          <span>Filter by agent:</span>
-          {agents.map(a => (
-            <button
-              key={a.agent_id}
-              className={`agent-filter-btn ${selectedAgent?.agent_id === a.agent_id ? "active" : ""}`}
-              onClick={() => onSelectAgent(a)}
-            >
-              {a.name}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="agent-filter-bar">
+        <span>Filter by agent:</span>
+        <button
+          className={`agent-filter-btn ${!selectedAgent ? "active" : ""}`}
+          onClick={() => onSelectAgent(null)}
+        >
+          All Agents
+        </button>
+        {agents.map(a => (
+          <button
+            key={a.agent_id}
+            className={`agent-filter-btn ${selectedAgent?.agent_id === a.agent_id ? "active" : ""}`}
+            onClick={() => onSelectAgent(a)}
+          >
+            {a.name} ({a.domain})
+          </button>
+        ))}
+      </div>
 
       <div className="activity-feed">
         {activity.length === 0 ? (
@@ -1040,7 +1073,7 @@ function ActivityPage({ activity, agents, selectedAgent, onSelectAgent }) {
           </div>
         ) : (
           activity.map(ev => (
-            <ActivityRow key={ev.id} event={ev} />
+            <ActivityRow key={ev.id} event={ev} agents={agents} />
           ))
         )}
       </div>
@@ -1078,9 +1111,16 @@ const STATUS_CLASS = {
   INFO:    "info",
 };
 
-function ActivityRow({ event }) {
+function ActivityRow({ event, agents = [] }) {
   const icon = EVENT_ICONS[event.event_type] || <Activity size={18} />;
   const statusClass = STATUS_CLASS[event.status] || "info";
+
+  const matchingAgent = event.agent_id ? agents.find(a => a.agent_id === event.agent_id) : null;
+  const agentLabel = matchingAgent
+    ? `${matchingAgent.name} (${matchingAgent.domain})`
+    : event.agent_id
+      ? `${event.agent_id.slice(0, 8)}…`
+      : null;
 
   return (
     <div className={`activity-row event-${statusClass}`}>
@@ -1089,7 +1129,7 @@ function ActivityRow({ event }) {
         <strong>{event.message}</strong>
         <span>
           {formatDate(event.created_at)}
-          {event.agent_id && <> · Agent: {event.agent_id.slice(0, 8)}…</>}
+          {agentLabel && <> · Agent: <span className="activity-agent-tag">{agentLabel}</span></>}
         </span>
       </div>
       <div className={`activity-status status-${statusClass}`}>
