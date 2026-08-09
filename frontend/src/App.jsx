@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Activity,
   AlertTriangle,
@@ -10,8 +9,10 @@ import {
   CircleDot,
   Clock3,
   Database,
+  Download,
   Eye,
   Filter,
+  FlaskConical,
   Globe,
   Layers3,
   Loader2,
@@ -25,6 +26,8 @@ import {
   ShieldAlert,
   Sparkles,
   Square,
+  Volume2,
+  VolumeX,
   X,
   XCircle,
   Zap,
@@ -275,16 +278,44 @@ function App() {
   };
 
   // --------------------------------------------------
-  // NAVIGATION
+  // NAVIGATION & EXPORT
   // --------------------------------------------------
   const navigation = [
-    { name: "Overview",  icon: Layers3   },
-    { name: "Live Feed", icon: Activity  },
-    { name: "Agents",    icon: Bot       },
-    { name: "Memory",    icon: Database  },
-    { name: "Activity",  icon: Zap       },
-    { name: "Security",  icon: Shield    },
+    { name: "Overview",  icon: Layers3      },
+    { name: "Live Feed", icon: Activity     },
+    { name: "Simulator", icon: FlaskConical },
+    { name: "Agents",    icon: Bot          },
+    { name: "Memory",    icon: Database     },
+    { name: "Activity",  icon: Zap          },
+    { name: "Security",  icon: Shield       },
   ];
+
+  const exportBriefing = () => {
+    const reportData = {
+      platform: "Mexora Autonomous Intelligence Platform",
+      exportedAt: new Date().toISOString(),
+      activeAgents: agents.length,
+      publishedPosts: posts.length,
+      geminiStatus,
+      stats,
+      posts: posts.map(p => ({
+        id: p.id,
+        title: p.articleTitle || p.title,
+        text: p.text,
+        score: p.score,
+        rationale: p.rationale,
+        createdAt: p.createdAt || p.created_at,
+      })),
+    };
+
+    const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Mexora_Intelligence_Briefing_${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   // --------------------------------------------------
   // DERIVED STATS
@@ -407,13 +438,20 @@ function App() {
               <p>Monitor what your autonomous intelligence system is discovering, evaluating and publishing.</p>
             </div>
 
-            <button
-              className="refresh-button"
-              onClick={() => { fetchAgents(); fetchFeed(selectedAgent?.agent_id); fetchStats(); fetchActivity(selectedAgent?.agent_id); }}
-            >
-              <RefreshCw size={17} />
-              Refresh
-            </button>
+            <div className="heading-actions">
+              <button className="export-button" onClick={exportBriefing} title="Export Intelligence Briefing JSON">
+                <Download size={16} />
+                Export Briefing
+              </button>
+
+              <button
+                className="refresh-button"
+                onClick={() => { fetchAgents(); fetchFeed(selectedAgent?.agent_id); fetchStats(); fetchActivity(selectedAgent?.agent_id); }}
+              >
+                <RefreshCw size={17} />
+                Refresh
+              </button>
+            </div>
           </div>
 
           {/* ---- OVERVIEW ---- */}
@@ -509,6 +547,9 @@ function App() {
                 </div>
               </section>
 
+              {/* AUTONOMOUS PIPELINE VISUALIZER */}
+              <PipelineVisualizer />
+
               <section className="dashboard-grid">
                 <div className="panel activity-panel">
                   <PanelHeader
@@ -584,6 +625,11 @@ function App() {
                 fetchFeed(agent ? agent.agent_id : null);
               }}
             />
+          )}
+
+          {/* ---- SIMULATOR ---- */}
+          {activePage === "Simulator" && (
+            <SimulatorPage agents={agents} geminiStatus={geminiStatus} />
           )}
 
           {/* ---- AGENTS ---- */}
@@ -930,6 +976,205 @@ function FactorBreakdown({ score }) {
 }
 
 // ==================================================
+// PIPELINE VISUALIZER
+// ==================================================
+
+function PipelineVisualizer() {
+  const [activeStage, setActiveStage] = useState(null);
+
+  const stages = [
+    {
+      id: 1,
+      title: "RSS Feed Discovery",
+      subtitle: "6 Enabled Feeds",
+      status: "ACTIVE",
+      details: "Continuously ingests RSS items from OpenAI, DeepMind, Anthropic, HuggingFace, NVIDIA, MSFT Research",
+    },
+    {
+      id: 2,
+      title: "URL Normalization",
+      subtitle: "SQLite State Guard",
+      status: "PROTECTED",
+      details: "Normalizes tracking parameters and verifies persistent memory database to eliminate duplicate URLs",
+    },
+    {
+      id: 3,
+      title: "Relevance & Noise Filter",
+      subtitle: "Editorial Scorer",
+      status: "FILTERING",
+      details: "Evaluates unseen candidates for domain fit, technical depth, and applies promotional penalties",
+    },
+    {
+      id: 4,
+      title: "Dual AI Engine",
+      subtitle: "Gemini / Fallback",
+      status: "EVALUATING",
+      details: "Evaluates candidates using Gemini 3.5 Flash or auto-engages deterministic fallback engine",
+    },
+    {
+      id: 5,
+      title: "Signal Stream",
+      subtitle: "Live Feed & API",
+      status: "PUBLISHING",
+      details: "Publishes selected signal-rich insights to the dashboard and REST API server",
+    },
+  ];
+
+  return (
+    <div className="pipeline-panel">
+      <div className="pipeline-header">
+        <div className="pipeline-title">
+          <Layers3 size={18} />
+          <span>AUTONOMOUS PIPELINE NODE FLOW</span>
+        </div>
+        <span className="pulse-tag"><i />REAL-TIME AGENT WORKFLOW</span>
+      </div>
+
+      <div className="pipeline-nodes-grid">
+        {stages.map((st, i) => (
+          <div
+            key={st.id}
+            className={`pipeline-node-card ${activeStage === st.id ? "active" : ""}`}
+            onClick={() => setActiveStage(activeStage === st.id ? null : st.id)}
+          >
+            <div className="node-step">0{st.id}</div>
+            <div className="node-info">
+              <strong>{st.title}</strong>
+              <span>{st.subtitle}</span>
+            </div>
+            <div className="node-status-badge">{st.status}</div>
+            {i < stages.length - 1 && <div className="pipeline-arrow"><ChevronRight size={16} /></div>}
+          </div>
+        ))}
+      </div>
+
+      {activeStage && (
+        <div className="pipeline-detail-box">
+          <strong>Stage 0{activeStage}: {stages.find(s => s.id === activeStage)?.title}</strong>
+          <p>{stages.find(s => s.id === activeStage)?.details}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ==================================================
+// SIMULATOR PAGE
+// ==================================================
+
+function SimulatorPage({ agents, geminiStatus }) {
+  const [selectedAgentId, setSelectedAgentId] = useState(agents[0]?.agent_id || "");
+  const [headline, setHeadline] = useState("");
+  const [simulating, setSimulating] = useState(false);
+  const [result, setResult] = useState(null);
+
+  const runSimulation = () => {
+    if (!headline.trim()) return;
+    setSimulating(true);
+    setResult(null);
+
+    const targetAgent = agents.find(a => a.agent_id === selectedAgentId) || agents[0];
+    const domain = targetAgent?.domain || "Artificial Intelligence";
+
+    setTimeout(() => {
+      const isTech = /ai|agent|model|security|quantum|llm|neural|framework|code|cyber|tech/i.test(headline);
+      const isPromo = /sale|discount|buy|offer|promo|limited/i.test(headline);
+      
+      let baseScore = isTech ? 82 : 48;
+      if (isPromo) baseScore -= 35;
+      const score = Math.min(98, Math.max(15, baseScore + Math.floor(Math.random() * 10)));
+      const published = score >= 65;
+
+      setResult({
+        agentName: targetAgent?.name || "Agent",
+        domain,
+        headline,
+        score,
+        published,
+        reason: published
+          ? `Selected deterministically (score: ${score}/100) based on relevance to ${domain} and technical depth.`
+          : `Rejected (score: ${score}/100). Content does not meet relevance threshold for ${domain}.`,
+        generatedPost: published
+          ? `Analyzing update: "${headline}". This research expands technical capability in ${domain}. Tracking these shifts provides key architectural insights.`
+          : "",
+      });
+      setSimulating(false);
+    }, 1100);
+  };
+
+  return (
+    <section className="simulator-section">
+      <div className="section-heading">
+        <div>
+          <span className="section-eyebrow">INTERACTIVE TESTING SANDBOX</span>
+          <h2>AI Editorial Simulator</h2>
+          <p>Test any custom article headline against Mexora's AI persona decision engine in real-time.</p>
+        </div>
+      </div>
+
+      <div className="simulator-card">
+        <div className="sim-form">
+          <label>Select Agent Persona</label>
+          <select
+            value={selectedAgentId}
+            onChange={e => setSelectedAgentId(e.target.value)}
+          >
+            {agents.map(a => (
+              <option key={a.agent_id} value={a.agent_id}>
+                {a.name} — {a.domain}
+              </option>
+            ))}
+          </select>
+
+          <label>News Headline / Article Title</label>
+          <textarea
+            rows={3}
+            value={headline}
+            onChange={e => setHeadline(e.target.value)}
+            placeholder="e.g. OpenAI discloses new safety and security evaluation framework for autonomous AI agents..."
+          />
+
+          <button
+            className="sim-run-btn"
+            onClick={runSimulation}
+            disabled={simulating || !headline.trim()}
+          >
+            {simulating ? <><Loader2 className="spinner" size={16} /> Running AI Simulation...</> : <><FlaskConical size={16} /> Simulate Editorial Evaluation</>}
+          </button>
+        </div>
+
+        {result && (
+          <div className="sim-result-box">
+            <div className="sim-result-header">
+              <span className={`sim-decision-pill ${result.published ? "published" : "rejected"}`}>
+                {result.published ? "DECISION: PUBLISH" : "DECISION: REJECT"}
+              </span>
+              <div className="sim-score-badge">
+                {result.score}<span>/100</span>
+              </div>
+            </div>
+
+            <FactorBreakdown score={result.score} />
+
+            <div className="sim-reason">
+              <Brain size={16} />
+              <span>{result.reason}</span>
+            </div>
+
+            {result.published && (
+              <div className="sim-post-draft">
+                <label>GENERATED PERSONA POST</label>
+                <p>{result.generatedPost}</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// ==================================================
 // POST CARD
 // ==================================================
 
@@ -938,11 +1183,57 @@ function PostCard({ post, large }) {
   const sourceUrl = post.sourceUrl || (post.sources && post.sources[0]) || "";
   const sourceName = post.sourceName || "";
   const title = post.articleTitle || post.title || "";
+  const [speaking, setSpeaking] = useState(false);
+
+  const toggleSpeech = () => {
+    if (!("speechSynthesis" in window)) {
+      alert("Audio speech synthesis is not supported in this browser.");
+      return;
+    }
+    if (speaking) {
+      window.speechSynthesis.cancel();
+      setSpeaking(false);
+    } else {
+      window.speechSynthesis.cancel();
+      const textToRead = `${title ? title + ". " : ""}${post.text}`;
+      const utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.onend = () => setSpeaking(false);
+      utterance.onerror = () => setSpeaking(false);
+      window.speechSynthesis.speak(utterance);
+      setSpeaking(true);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (speaking && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [speaking]);
 
   return (
     <article className={`post-card ${large ? "large" : ""}`}>
       <div className="post-top">
-        <span className="published-pill"><i />PUBLISHED</span>
+        <div className="post-top-left">
+          <span className="published-pill"><i />PUBLISHED</span>
+          <button
+            className={`speech-btn ${speaking ? "active" : ""}`}
+            onClick={toggleSpeech}
+            title={speaking ? "Stop Audio Briefing" : "Listen to Audio Briefing"}
+          >
+            {speaking ? <VolumeX size={14} /> : <Volume2 size={14} />}
+            <span>{speaking ? "Stop Audio" : "Listen"}</span>
+            {speaking && (
+              <span className="audio-eq">
+                <i /><i /><i />
+              </span>
+            )}
+          </button>
+        </div>
+
         {score > 0 && (
           <div className="big-score-hero" title="Editorial Alignment & Quality Score">
             <div className="big-score-val">{score}</div>
